@@ -1,0 +1,57 @@
+
+@extends('admin.layouts.app')
+
+@section('content')
+<div class="container-fluid">
+    <h3 class="mb-4">Edit Teacher</h3>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form action="{{ route('admin.teachers.update', $teacher) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control"
+                               value="{{ old('name', $teacher->name) }}" required>
+                        @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Surname</label>
+                        <input type="text" name="surname" class="form-control"
+                               value="{{ old('surname', $teacher->surname) }}" required>
+                        @error('surname') <div class="text-danger">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control"
+                               value="{{ old('username', $teacher->username) }}" required>
+                        @error('username') <div class="text-danger">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" name="phone_number" class="form-control"
+                               value="{{ old('phone_number', $teacher->phone_number) }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" name="password" class="form-control"
+                               placeholder="Leave empty to keep current password">
+                        @error('password') <div class="text-danger">{{ $message }}</div> @enderror
+                    </div>
+                </div>
+
+                <button class="btn btn-primary">Update Teacher</button>
+                <a href="{{ route('admin.teachers.index') }}"
+                   class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
