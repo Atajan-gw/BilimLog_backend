@@ -37,7 +37,7 @@
                     <label class="form-label">Phone Number</label>
                     <input type="text" name="phone_number"
                            class="form-control"
-                           value="{{ old('phone_number') }}">
+                           value="{{ old('phone_number') }}" required>
                 </div>
 
                 <div class="col-md-6">
@@ -56,8 +56,22 @@
                 <div class="col-md-6">
                     <label class="form-label">Course Year</label>
                     <input type="number" name="course_year"
-                           class="form-control"
+                           class="form-control" min="1" max="8"
                            value="{{ old('course_year') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Specialty</label>
+                    <input type="text" name="specialty"
+                           class="form-control"
+                           value="{{ old('specialty') }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Student ID Card</label>
+                    <input type="text" name="student_id_card_number"
+                           class="form-control"
+                           value="{{ old('student_id_card_number') }}" required>
                 </div>
 
                 <div class="col-md-6">
@@ -65,7 +79,8 @@
                     <select name="faculty_id" class="form-select" required>
                         <option value="">Select Faculty</option>
                         @foreach($faculties as $faculty)
-                            <option value="{{ $faculty->id }}">
+                            <option value="{{ $faculty->id }}"
+                                @selected(old('faculty_id') == $faculty->id)>
                                 {{ $faculty->name }}
                             </option>
                         @endforeach
@@ -77,7 +92,8 @@
                     <select name="group_id" class="form-select" required>
                         <option value="">Select Group</option>
                         @foreach($groups as $group)
-                            <option value="{{ $group->id }}">
+                            <option value="{{ $group->id }}"
+                                @selected(old('group_id') == $group->id)>
                                 {{ $group->name }}
                             </option>
                         @endforeach

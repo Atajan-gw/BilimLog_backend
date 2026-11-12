@@ -20,7 +20,20 @@ class DatabaseSeeder extends Seeder
             'password' => 'password',
         ]);
 
-        $faculty = Faculty::create(['name' => 'Computer Science', 'description' => 'Computing and information technology']);
+        $faculties = collect([
+            ['name' => 'Computer Science', 'description' => 'Computing and information technology'],
+            ['name' => 'Information Technology', 'description' => 'Networks, systems, and applied computing'],
+            ['name' => 'Economics', 'description' => 'Economics, finance, and business administration'],
+            ['name' => 'Law', 'description' => 'Legal studies and public law'],
+            ['name' => 'Medicine', 'description' => 'Medical science and clinical practice'],
+            ['name' => 'Engineering', 'description' => 'Mechanical, civil, and electrical engineering'],
+            ['name' => 'Philology', 'description' => 'Languages, literature, and translation'],
+            ['name' => 'Mathematics', 'description' => 'Pure and applied mathematics'],
+            ['name' => 'Pedagogy', 'description' => 'Education and teaching methods'],
+            ['name' => 'Natural Sciences', 'description' => 'Physics, chemistry, and biology'],
+        ])->map(fn (array $data) => Faculty::create($data));
+
+        $faculty = $faculties->firstWhere('name', 'Computer Science');
         $group = Group::create(['name' => 'CS-101', 'faculty_id' => $faculty->id, 'course_number' => 1]);
 
         $subjects = collect([
