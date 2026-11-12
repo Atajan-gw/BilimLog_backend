@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreStudentRequest;
+use App\Http\Requests\Admin\UpdateStudentRequest;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\Faculty;
@@ -56,6 +57,49 @@ class StudentController extends Controller
         return redirect()
             ->route('admin.students.index')
             ->with('success', 'Student created.');
+    }
+
+    public function edit(Student $student)
+    {
+        $student->load('user');
+
+        abort_unless($student->user, 404);
+
+        return view('admin.students.edit', [
+            'student' => $student,
+            'faculties' => Faculty::orderBy('name')->get(),
+            'groups' => Group::orderBy('name')->get(),
+        ]);
+    }
+
+    public function update(UpdateStudentRequest $request, Student $student)
+    {
+        DB::transaction(function () use ($request, $student) {
+            $userData = $request->safe()->only([
+                'name',
+                'surname',
+                'phone_number',
+                'username',
+            ]);
+
+            if ($request->filled('password')) {
+                $userData['password'] = $request->string('password')->toString();
+            }
+
+            $student->user->update($userData);
+
+            $student->update($request->safe()->only([
+                'faculty_id',
+                'group_id',
+                'specialty',
+                'course_year',
+                'student_id_card_number',
+            ]));
+        });
+
+        return redirect()
+            ->route('admin.students.index')
+            ->with('success', 'Student updated.');
     }
 
     public function destroy(Student $student)
