@@ -36,7 +36,19 @@
                     <tr>
                         <td>{{ $groups->firstItem() + $loop->index }}</td>
                         <td>{{ $group->name }}</td>
-                        <td>{{ $group->teacher?->name ?? 'Not assigned' }}</td>
+                        <td>
+                            @if ($group->teacher)
+                                <div class="d-flex align-items-center gap-2">
+                                    @include('admin.partials.avatar', [
+                                        'avatarUrl' => $group->teacher->avatar_url,
+                                        'name' => $group->teacher->name,
+                                    ])
+                                    <span>{{ $group->teacher->name }}</span>
+                                </div>
+                            @else
+                                Not assigned
+                            @endif
+                        </td>
                         <td>{{ $group->students_count }}</td>
                         <td>
                             <a href="{{ route('admin.groups.show', $group) }}"

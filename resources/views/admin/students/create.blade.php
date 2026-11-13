@@ -14,7 +14,7 @@
 
     <div class="card-body">
 
-        <form method="POST" action="{{ route('admin.students.store') }}">
+        <form method="POST" action="{{ route('admin.students.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="row g-3">
@@ -52,6 +52,8 @@
                     <input type="password" name="password"
                            class="form-control" required>
                 </div>
+
+                @include('admin.partials.avatar-field')
 
                 <div class="col-md-6">
                     <label class="form-label">Course Year</label>

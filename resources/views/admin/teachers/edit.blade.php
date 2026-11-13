@@ -7,7 +7,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="{{ route('admin.teachers.update', $teacher) }}" method="POST">
+            <form action="{{ route('admin.teachers.update', $teacher) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -45,6 +45,8 @@
                                placeholder="Leave empty to keep current password">
                         @error('password') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
+
+                    @include('admin.partials.avatar-field', ['avatarUrl' => $teacher->avatar_url])
                 </div>
 
                 <button class="btn btn-primary">Update Teacher</button>

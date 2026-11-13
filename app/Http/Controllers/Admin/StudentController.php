@@ -5,24 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreStudentRequest;
 use App\Http\Requests\Admin\UpdateStudentRequest;
-use App\Models\Student;
-use App\Models\User;
 use App\Models\Faculty;
 use App\Models\Group;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
     public function index()
     {
-        $students = \App\Models\Student::with([
+        $students = Student::with([
             'user',
             'faculty',
-            'group'
+            'group',
         ])
-        ->latest()
-        ->paginate(10);
-    
+            ->latest()
+            ->paginate(10);
+
         return view('admin.students.index', compact('students'));
     }
 
@@ -36,7 +36,7 @@ class StudentController extends Controller
 
     public function store(StoreStudentRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        $user = DB::transaction(function () use ($request) {
             $user = User::create($request->safe()->only([
                 'name',
                 'surname',
@@ -52,7 +52,13 @@ class StudentController extends Controller
                 'course_year',
                 'student_id_card_number',
             ]) + ['user_id' => $user->id]);
+
+            return $user;
         });
+
+        if ($request->hasFile('avatar')) {
+            $user->replaceAvatar($request->file('avatar'));
+        }
 
         return redirect()
             ->route('admin.students.index')
@@ -96,6 +102,10 @@ class StudentController extends Controller
                 'student_id_card_number',
             ]));
         });
+
+        if ($request->hasFile('avatar')) {
+            $student->user->replaceAvatar($request->file('avatar'));
+        }
 
         return redirect()
             ->route('admin.students.index')

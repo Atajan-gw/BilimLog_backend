@@ -13,7 +13,7 @@
 
     <div class="card-body">
 
-        <form method="POST" action="{{ route('admin.students.update', $student) }}">
+        <form method="POST" action="{{ route('admin.students.update', $student) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -53,6 +53,8 @@
                            class="form-control"
                            placeholder="Leave empty to keep current password">
                 </div>
+
+                @include('admin.partials.avatar-field', ['avatarUrl' => $student->user->avatar_url])
 
                 <div class="col-md-6">
                     <label class="form-label">Course Year</label>

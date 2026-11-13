@@ -7,7 +7,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="{{ route('admin.teachers.store') }}" method="POST">
+            <form action="{{ route('admin.teachers.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">
@@ -43,6 +43,8 @@
                         <input type="password" name="password" class="form-control" required>
                         @error('password') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
+
+                    @include('admin.partials.avatar-field')
                 </div>
 
                 <button class="btn btn-primary">Save Teacher</button>

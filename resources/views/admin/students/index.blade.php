@@ -28,6 +28,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
+                        <th>Avatar</th>
                         <th>Name</th>
                         <th>Username</th>
                         <th>Faculty</th>
@@ -43,6 +44,13 @@
 
                         <tr>
                             <td>{{ $student->id }}</td>
+
+                            <td>
+                                @include('admin.partials.avatar', [
+                                    'avatarUrl' => $student->user->avatar_url,
+                                    'name' => $student->user->name,
+                                ])
+                            </td>
 
                             <td>
                                 {{ $student->user->name }}
@@ -84,7 +92,7 @@
                     @empty
 
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">
+                            <td colspan="8" class="text-center text-muted py-4">
                                 No students found.
                             </td>
                         </tr>

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UpdateAvatarRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -52,6 +54,34 @@ class AuthController extends Controller
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()?->delete();
+
         return response()->json(['message' => 'Logged out.']);
+    }
+
+    public function updateAvatar(UpdateAvatarRequest $request): JsonResponse
+    {
+        $user = $request->user();
+        $user->replaceAvatar($request->file('avatar'));
+
+        return response()->json([
+            'message' => 'Avatar updated.',
+            'user' => $user->fresh(),
+        ]);
+    }
+
+    public function destroyAvatar(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        abort_unless($user->canSetAvatar(), 403);
+
+        if (is_string($user->avatar)) {
+            Storage::disk('public')->delete($user->avatar);
+            $user->update(['avatar' => null]);
+        }
+
+        return response()->json([
+            'message' => 'Avatar removed.',
+            'user' => $user->fresh(),
+        ]);
     }
 }

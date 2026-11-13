@@ -16,6 +16,8 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/avatar', [AuthController::class, 'updateAvatar'])->middleware('throttle:10,1');
+        Route::delete('/avatar', [AuthController::class, 'destroyAvatar']);
         Route::get('/student/profile', [StudentController::class, 'show']);
         Route::get('/student/grades', [GradeController::class, 'index']);
         Route::get('/teacher/groups', [TeacherController::class, 'groups']);

@@ -32,6 +32,7 @@ class UpdateStudentRequest extends FormRequest
                 Rule::unique('users', 'username')->ignore($student?->user_id),
             ],
             'password' => ['nullable', 'string', 'min:8'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'faculty_id' => ['required', 'exists:faculties,id'],
             'group_id' => ['required', 'exists:groups,id'],
             'specialty' => ['required', 'string', 'max:255'],

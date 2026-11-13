@@ -33,12 +33,18 @@ class TeacherController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'phone_number' => ['nullable', 'string', 'max:30'],
             'password' => ['required', 'string', 'min:6'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
         $data['password'] = Hash::make($data['password']);
         $data['role'] = 'teacher';
+        unset($data['avatar']);
 
-        User::create($data);
+        $teacher = User::create($data);
+
+        if ($request->hasFile('avatar')) {
+            $teacher->replaceAvatar($request->file('avatar'));
+        }
 
         return redirect()->route('admin.teachers.index')
             ->with('success', 'Teacher successfully created.');
@@ -73,15 +79,22 @@ class TeacherController extends Controller
             ],
             'phone_number' => ['nullable', 'string', 'max:30'],
             'password' => ['nullable', 'string', 'min:6'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
         }
 
+        unset($data['avatar']);
+
         $teacher->update($data);
+
+        if ($request->hasFile('avatar')) {
+            $teacher->replaceAvatar($request->file('avatar'));
+        }
 
         return redirect()->route('admin.teachers.index')
             ->with('success', 'Teacher successfully updated.');

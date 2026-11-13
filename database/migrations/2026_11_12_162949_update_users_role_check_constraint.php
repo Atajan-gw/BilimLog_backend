@@ -7,10 +7,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
+        DB::statement('
             ALTER TABLE users
             DROP CONSTRAINT IF EXISTS users_role_check
-        ");
+        ');
 
         DB::statement("
             ALTER TABLE users
@@ -21,10 +25,14 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement("
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
+        DB::statement('
             ALTER TABLE users
             DROP CONSTRAINT IF EXISTS users_role_check
-        ");
+        ');
 
         DB::statement("
             ALTER TABLE users

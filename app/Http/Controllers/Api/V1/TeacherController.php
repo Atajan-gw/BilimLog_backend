@@ -17,7 +17,7 @@ class TeacherController extends Controller
         $groups = $request->user()->groups()
             ->with([
                 'faculty:id,name',
-                'students.user:id,name,surname,username,phone_number',
+                'students.user:id,name,surname,username,phone_number,avatar',
                 'students.grades.subject:id,name,credits',
             ])
             ->orderBy('name')
