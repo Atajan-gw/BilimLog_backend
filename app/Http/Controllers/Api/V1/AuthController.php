@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\UpdateAvatarRequest;
+use App\Http\Requests\Auth\UpdateProfileRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -56,6 +57,23 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()?->delete();
 
         return response()->json(['message' => 'Logged out.']);
+    }
+
+    public function updateProfile(UpdateProfileRequest $request): JsonResponse
+    {
+        $user = $request->user();
+        $data = $request->safe()->only(['name', 'surname', 'phone_number', 'username']);
+
+        if ($request->filled('password')) {
+            $data['password'] = $request->string('password')->toString();
+        }
+
+        $user->update($data);
+
+        return response()->json([
+            'message' => 'Account updated.',
+            'user' => $user->fresh()->load('student.faculty', 'student.group'),
+        ]);
     }
 
     public function updateAvatar(UpdateAvatarRequest $request): JsonResponse
