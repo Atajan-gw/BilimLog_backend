@@ -34,7 +34,7 @@
             {{-- Sidebar --}}
             <aside class="col-md-3 col-lg-2 bg-dark text-white p-3">
 
-                <h4 class="text-center mb-4">SMS Admin</h4>
+                <h4 class="text-center mb-4">BilimLog Admin</h4>
 
                 <nav class="nav flex-column gap-2">
 
