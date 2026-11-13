@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\GradeController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\SubjectController;
+use App\Http\Controllers\Api\V1\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -17,6 +18,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::get('/student/profile', [StudentController::class, 'show']);
         Route::get('/student/grades', [GradeController::class, 'index']);
+        Route::get('/teacher/groups', [TeacherController::class, 'groups']);
+        Route::post('/teacher/grades', [TeacherController::class, 'storeGrade']);
         Route::apiResource('faculties', FacultyController::class)->only(['index', 'show']);
         Route::apiResource('groups', GroupController::class)->only(['index', 'show']);
         Route::apiResource('subjects', SubjectController::class)->only(['index', 'show']);
